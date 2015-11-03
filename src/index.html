@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Angular Todo</title>
+		<link rel="stylesheet" href="css/bundle.css">
+	</head>
+	<body ng-app="todo">
+		<div ng-controller="TodoCtrl" class="app" id="app">
+			<div>
+				<div class="text-center">
+					<div class="head">angular list</div>
+				</div>
+			</div>
+			<div class="content list">
+				<div>
+					<form autocomplete="off" ng-submit="submitText()">
+						<input
+							name="add-todo"
+							class="text-box"
+							placeholder="What needs to be done?"
+							value=""
+							ng-model="newTodo" />
+					</form>
+					<div ng-view>
+						
+					</div>
+				</div>
+			</div>
+			<footer>
+				<div class="text-center">
+					<a href="/#/todo">
+						<button class="btn btn-default pagesBtn">
+							ToDo
+						</button>
+					</a>
+					<a href="/#/completed">
+						<button class="btn btn-default pagesBtn">
+							Completed
+						</button>
+					</a>
+				</div>
+			</footer>
+		</div>
+		<script src="/scripts/bundle.js"></script>
+	</body>
+</html>
