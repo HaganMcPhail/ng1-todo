@@ -8,6 +8,7 @@ var browserify = require('browserify'); // Bundles JS
 var source = require('vinyl-source-stream'); // Use conventional text streams with Gulp
 var concat = require('gulp-concat'); //Concatenates files
 var lint = require('gulp-eslint'); //Lint JS files, including JSX
+var jquery = require('jquery');
 
 var config = {
 	port: 9011,

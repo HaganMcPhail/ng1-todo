@@ -29990,7 +29990,39 @@ app.controller('TodoCtrl', function($scope, $rootScope) {
   		} else {
   			$rootScope.completedList = [];
   		}
-	}	
+	}
+
+	$scope.showEditItem = function(item) {
+		var inputItemTextbox = document.getElementsByClassName('editText'+item.id)[0],
+			spanDisplayText = document.getElementsByClassName('listItem'+item.id)[0];
+			
+	    spanDisplayText.style.display = "none";
+	    inputItemTextbox.value = item.value;
+	    inputItemTextbox.style.display = "inline-block";
+    }
+
+    $scope.hideEditItem = function(item) {
+	    document.getElementsByClassName('listItem'+item.id)[0].style.display = "inline-block";
+	    document.getElementsByClassName('editText'+item.id)[0].style.display = "none";
+    }
+
+    $scope.editItem = function(item, list, listName) {
+
+		for(var i = 0; i < list.length; i++) {
+		    var obj = list[i];
+		    if(list[i].id == obj.id) {
+		        list[i].value = document.getElementsByClassName('editText'+item.id)[0].value;
+		    }
+		}
+
+		if (listName === 'todo'){
+  			$rootScope.todoList = list;
+  		} else {
+  			$rootScope.completedList = list;
+  		}
+
+    	this.hideEditItem(item);
+    }
 
 });
 
