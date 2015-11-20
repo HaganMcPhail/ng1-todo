@@ -99,6 +99,7 @@ app.controller('InputCtrl', ['$scope', 'todoFactory', function($scope, todoFacto
 			$scope.newTodo = '';
 		}
 		todoFactory.toggleDeleteAll();
+		window.location = 'http://localhost:9011/#/todo';
 	}
 }]);
 

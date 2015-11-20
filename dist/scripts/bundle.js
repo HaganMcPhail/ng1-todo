@@ -45654,6 +45654,11 @@ app.config(['$urlRouterProvider', '$stateProvider', function($urlRouterProvider,
 			templateUrl: 'views/completed.html',
 			controller: 'ListCtrl'
 		})
+		.state('""', {
+			url: '/todo',
+			templateUrl: 'views/completed.html',
+			controller: 'ListCtrl'
+		})
 }]);
 
 // ********************** Factory ********************** //
@@ -45730,6 +45735,7 @@ app.controller('InputCtrl', ['$scope', 'todoFactory', function($scope, todoFacto
 			$scope.newTodo = '';
 		}
 		todoFactory.toggleDeleteAll();
+		window.location = 'http://localhost:9011/#/todo';
 	}
 }]);
 
