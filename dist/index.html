@@ -4,15 +4,13 @@
 		<title>Angular Todo</title>
 		<link rel="stylesheet" href="css/bundle.css">
 	</head>
-	<body ng-app="todo">
-		<div ng-controller="TodoCtrl" class="app" id="app">
-			<div>
-				<div class="text-center">
-					<div class="head">angular list</div>
-				</div>
+	<body ng-app="app">
+		<div >
+			<div class="text-center">
+				<div class="head">angular list</div>
 			</div>
 			<div class="content list">
-				<div>
+				<div ng-controller="InputCtrl">
 					<form autocomplete="off" ng-submit="submitText()">
 						<input
 							name="add-todo"
@@ -21,24 +19,22 @@
 							value=""
 							ng-model="newTodo" />
 					</form>
-					<div ng-view>
-						
-					</div>
+				</div>
+				<div ui-view>
+
 				</div>
 			</div>
 			<footer>
-				<div class="text-center">
-					<a href="/#/todo">
-						<button class="btn btn-default pagesBtn">
-							ToDo
-						</button>
-					</a>
-					<a href="/#/completed">
-						<button class="btn btn-default pagesBtn">
-							Completed
-						</button>
-					</a>
-				</div>
+				<a ui-sref="todo">
+					<button class="btn btn-default pagesBtn">
+						ToDo
+					</button>
+				</a>
+				<a ui-sref="completed">
+					<button class="btn btn-default pagesBtn">
+						Completed
+					</button>
+				</a>
 			</footer>
 		</div>
 		<script src="/scripts/bundle.js"></script>

@@ -1,16 +1,6 @@
-<div ng-repeat="item in todoList" class="item">
-	<span class="glyphicon glyphicon-check check icon" ng-click="markCompleted(item)"></span>
-	&nbsp;
-	<span class="glyphicon glyphicon-pencil pencil icon" ng-click="showEditItem(item)"></span>
-	<span class="itemValue">
-		<span class="listItem{{item.id}}">{{item.value}}</span>
-		<form ng-submit="editItem(item, todoList, 'todo')" style="display:inline;">
-			<input class="editText{{item.id}}" type="text" ng-model="editedItem" placeholder="Edit Item" style="display:none" value="{{item.value}}" />
-		</form>
-	</span>
-	<span class="glyphicon glyphicon-trash delete icon" ng-click="removeItem(item, todoList, 'todo')"></span>
-</div>
-<div class="item">
-	<span class="itemValue"><span class="all-items"></span></span>
-	<span title="delete all todo items" class="glyphicon glyphicon-remove delete icon" ng-click="deleteAll('todo')"></span>
+<div ng-controller="TodoCtrl">
+	<div ng-repeat="item in todoList" class="item">
+		<todo-list-item item="item"></todo-list-item>
+	</div>
+	<delete-all ng-if="showDeleteAllTodo === true"></delete-all>
 </div>

@@ -1,135 +1,181 @@
 "use strict";
 
 var Angular = require('angular');
-var AngularRoute = require('angular-route');
+var AngularUIRouter = require('angular-ui-router');
+var _ = require('lodash');
+var app = angular.module('app', ['ui.router']);
 
-var app = angular.module('todo', ['ngRoute']);
+app.config(['$urlRouterProvider', '$stateProvider', function($urlRouterProvider, $stateProvider) {
+	$urlRouterProvider.otherwise('/todo');
+	$stateProvider
+		.state('todo', {
+			url: '/todo',
+			templateUrl: 'views/todo.html',
+			controller: 'ListCtrl'
+		})
+		.state('completed', {
+			url: '/completed',
+			templateUrl: 'views/completed.html',
+			controller: 'ListCtrl'
+		})
+		.state('""', {
+			url: '/todo',
+			templateUrl: 'views/completed.html',
+			controller: 'ListCtrl'
+		})
+}]);
 
-app.factory("todoList"), function() {
-	var test = false;
-	return test;
-}
+app.factory('todoFactory', function(){
+	var data = {
+			todoList: [],
+			completedList: [],
+			count: 1,
+			showDeleteAllTodo: false,
+			showDeleteAllCompleted: false,
+			submitText: function(inputValue) {
+				var newItem = {};
+				newItem = {
+					id: 	data.count,
+					value: 	inputValue
+				}
+				data.todoList.push(newItem);
+				data.count++;
+			},
+			removeItem: function(itemToRemove, listName) {
+				if (listName === 'todo') {
+					_.remove(data.todoList, itemToRemove);
+				} else {
+					_.remove(data.completedList, itemToRemove);
+				}
+			},
+			addItem: function(itemToAdd, listName) {
+				if (listName === 'todo'){
+					data.todoList.push(itemToAdd);
+		  		} else {
+					data.completedList.push(itemToAdd);
+		  		}
+			},
+			toggleDeleteAll: function () {
+				if (data.todoList.length > 0) {
+					data.showDeleteAllTodo = true;
+				} else {
+					data.showDeleteAllTodo = false;
+				}
 
-app.controller('TodoCtrl', function($scope, $rootScope) {
-	
-	$rootScope.todoList = $rootScope.todoList || [], 
-	$rootScope.completedList = $rootScope.completedList || [], 
-	$rootScope.count = $rootScope.count || 0;
+				if (data.completedList.length > 0) {
+					data.showDeleteAllCompleted = true;
+				} else {
+					data.showDeleteAllCompleted = false;
+				}
 
-	$scope.submitText = function() {
-		
-		var inputValue = $scope.newTodo.trim(),
-			newItem = {};
-		
-		if (inputValue.length > 0){
-			newItem = {
-				id: 	$scope.count,
-				value: 	inputValue
+				console.log(data.showDeleteAllTodo);
 			}
-			$rootScope.todoList.push(newItem);
-			$rootScope.count++;
+		};
+
+	return data;
+});
+
+app.directive('todoListItem', ['todoFactory', function(todoFactory) {
+  return {
+  	restrict: 'E',
+    // scope: {
+    //   item: '=',
+    //   listName: '=',
+	//   icons: '='
+    // },
+	scope: false,
+    templateUrl: 'views/item.html'
+  };
+}]);
+
+app.directive('deleteAll', ['todoFactory', function(todoFactory) {
+  return {
+  	restrict: 'E',
+	scope: false,
+    templateUrl: 'views/deleteAll.html'
+  };
+}]);
+
+app.controller('InputCtrl', ['$scope', 'todoFactory', function($scope, todoFactory) {
+	$scope.submitText = function() {
+		if ($scope.newTodo.length > 0){
+			var inputValue = $scope.newTodo.trim();
+			todoFactory.submitText(inputValue);
 			$scope.newTodo = '';
 		}
+		todoFactory.toggleDeleteAll();
+	}
+}]);
 
+app.controller('ListCtrl', ['$scope', 'todoFactory', function($scope, todoFactory) {
+
+	//console.log('list: ' + myFactory.count);
+	$scope.todoList = todoFactory.todoList;
+	$scope.completedList = todoFactory.completedList;
+	$scope.editable = false;
+	$scope.showDeleteAllTodo = todoFactory.showDeleteAllTodo;
+	$scope.showDeleteAllCompleted = todoFactory.showDeleteAllCompleted;
+
+	$scope.removeItem = function(itemToRemove, listName) {
+		todoFactory.removeItem(itemToRemove, listName);
 	}
 
-	$scope.removeItem = function(itemToRemove, listToRemoveFrom, listName) {
+	$scope.addItem = function(itemToAdd, listName) {
+		todoFactory.addItem(itemToAdd, listName);
+		this.toggleDeleteAll();
+	}
 
-		for(var i = 0; i < listToRemoveFrom.length; i++) {
-		    var obj = listToRemoveFrom[i];
-
-		    if(itemToRemove.id == obj.id) {
-		        listToRemoveFrom.splice(i, 1);
-		  		i--;
-
-		  		if (listName === 'todo'){
-		  			$rootScope.todoList = listToRemoveFrom;
-		  		} else {
-		  			$rootScope.completedList = listToRemoveFrom;
-		  		}
-
-		    }
+	$scope.changeList = function(item, listName) {
+		if (listName === 'todo') {
+			this.removeItem(item, 'todo');
+			this.addItem(item, 'completed');
+		} else {
+			this.removeItem(item, 'completed');
+			this.addItem(item, 'todo');
 		}
-
 	}
 
-	$scope.addItem = function(itemToAdd, listToAddTo, listName) {
-
-		listToAddTo.push(itemToAdd);
-
+	$scope.deleteAll = function(listName) {
 		if (listName === 'todo'){
-  			$rootScope.todoList = listToAddTo;
+  			todoFactory.todoList = [];
+			$scope.todoList = [];
   		} else {
-  			$rootScope.completedList = listToAddTo;
-  		}
-	}
-
-	$scope.markCompleted = function(item) {
-
-		this.removeItem(item, $rootScope.todoList, 'todo');
-		this.addItem(item, $rootScope.completedList, 'completed');
-	}
-
-	$scope.markTodo = function(item) {
-
-		this.removeItem(item, $rootScope.completedList, 'completed');
-		this.addItem(item, $rootScope.todoList, 'todo');
-	}
-
-	$scope.deleteAll = function(list) {
-
-		if (list === 'todo'){
-  			$rootScope.todoList = [];
-  		} else {
-  			$rootScope.completedList = [];
+			todoFactory.completedList = [];
+			$scope.completedList = [];
   		}
 	}
 
 	$scope.showEditItem = function(item) {
-		var inputItemTextbox = document.getElementsByClassName('editText'+item.id)[0],
-			spanDisplayText = document.getElementsByClassName('listItem'+item.id)[0];
-			
-	    spanDisplayText.style.display = "none";
-	    inputItemTextbox.value = item.value;
-	    inputItemTextbox.style.display = "inline-block";
+		$scope.editable = true;
     }
 
-    $scope.hideEditItem = function(item) {
-	    document.getElementsByClassName('listItem'+item.id)[0].style.display = "inline-block";
-	    document.getElementsByClassName('editText'+item.id)[0].style.display = "none";
-    }
-
-    $scope.editItem = function(item, list, listName) {
-
-		for(var i = 0; i < list.length; i++) {
-		    var obj = list[i];
-		    if(list[i].id == obj.id) {
-		        list[i].value = document.getElementsByClassName('editText'+item.id)[0].value;
-		    }
+    $scope.editItem = function(item, listName) {
+		var editedItem = {
+			id: item.id,
+			value: document.getElementsByClassName('editText'+item.id)[0].value
 		}
 
-		if (listName === 'todo'){
-  			$rootScope.todoList = list;
-  		} else {
-  			$rootScope.completedList = list;
-  		}
+		if(listName === 'todo') {
+			_.remove(todoFactory.todoList, item);
+			todoFactory.todoList.push(editedItem);
+		} else {
+			_.remove(todoFactory.completedList, item);
+			todoFactory.completedList.push(editedItem);
+		}
 
-    	this.hideEditItem(item);
+    	$scope.editable = false;
     }
 
-});
+}]);
 
-app.config(['$routeProvider', function($routeProvider) {
-    $routeProvider
-        .when('/todo', {
-            templateUrl: '/views/todo.html',
-            controller: 'TodoCtrl'
-        })
-        .when('/completed', {
-            templateUrl: '/views/completed.html',
-            controller: 'TodoCtrl'
-        })
-        .otherwise({
-            redirectTo: '/todo'
-        });
+app.controller('TodoCtrl', ['$scope', 'todoFactory', function($scope, todoFactory) {
+	$scope.listName = "todo";
+	$scope.changeItemIcon = "unchecked";
+	$scope.showDeleteAllTodo = todoFactory.showDeleteAllTodo;
+}]);
+
+app.controller('CompletedCtrl', ['$scope', 'todoFactory', function($scope, todoFactory) {
+	$scope.listName = "completed";
+	$scope.changeItemIcon = "check";
+	$scope.showDeleteAllCompleted = todoFactory.showDeleteAllCompleted;
 }]);

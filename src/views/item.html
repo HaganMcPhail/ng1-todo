@@ -1,0 +1,12 @@
+<div ng-controller="ListCtrl" >
+	<span class="glyphicon glyphicon-{{changeItemIcon}} check icon" ng-click="changeList(item, listName)"></span>
+	&nbsp;
+	<span class="glyphicon glyphicon-pencil pencil icon" ng-click="showEditItem(item)"></span>
+	<span class="itemValue" ng-switch="editable">
+		<form ng-switch-when="true" ng-submit="editItem(item, listName)" style="display:inline;">
+			<input class="editText{{item.id}}" type="text" ng-model="editedItem" placeholder={{item.value}} value="" />
+		</form>
+		<span ng-switch-default class="listItem">{{item.value}}</span>
+	</span>
+	<span class="glyphicon glyphicon-trash delete icon" ng-click="removeItem(item, listName)"></span>
+</div>
