@@ -75,7 +75,9 @@ footer {
 
 .pagesBtn:hover, .pagesBtn:focus, .pagesBtn:active {
   color: #777;
-  outline: none !important; }
+  outline: none !important;
+  border: 1px solid transparent;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.25); }
 
 .all-items {
   color: rgba(0, 0, 0, 0.3); }
