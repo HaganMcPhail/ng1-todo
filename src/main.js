@@ -39,7 +39,7 @@ app.factory('todoFactory', function(){
 				newItem = {
 					id: 	data.count,
 					value: 	inputValue
-				}
+				};
 				data.todoList.push(newItem);
 				data.count++;
 			},
@@ -71,12 +71,7 @@ app.factory('todoFactory', function(){
 app.directive('todoListItem', ['todoFactory', function(todoFactory) {
   return {
   	restrict: 'E',
-    // scope: {
-    //   item: '=',
-    //   listName: '=',
-	//   icons: '='
-    // },
-	scope: false,
+	scope:false,
     templateUrl: 'views/item.html'
   };
 }]);
@@ -97,25 +92,16 @@ app.controller('InputCtrl', ['$scope', 'todoFactory', function($scope, todoFacto
 			var inputValue = $scope.newTodo.trim();
 			todoFactory.submitText(inputValue);
 			$scope.newTodo = '';
+			window.location = 'http://localhost:9011/#/todo';
 		}
 		todoFactory.toggleDeleteAll();
-		window.location = 'http://localhost:9011/#/todo';
 	}
 }]);
 
 app.controller('ListCtrl', ['$scope', 'todoFactory', function($scope, todoFactory) {
 	$scope.editable = false;
 	$scope.data = todoFactory;
-
-	$scope.removeItem = function(itemToRemove, listName) {
-		todoFactory.removeItem(itemToRemove, listName);
-		this.toggleDeleteAll();
-	}
-
-	$scope.addItem = function(itemToAdd, listName) {
-		todoFactory.addItem(itemToAdd, listName);
-		this.toggleDeleteAll();
-	}
+	$scope.editData = {};
 
 	$scope.changeList = function(item, listName) {
 		if (listName === 'todo') {
@@ -125,6 +111,16 @@ app.controller('ListCtrl', ['$scope', 'todoFactory', function($scope, todoFactor
 			this.removeItem(item, 'completed');
 			this.addItem(item, 'todo');
 		}
+	}
+
+	$scope.removeItem = function(itemToRemove, listName) {
+		todoFactory.removeItem(itemToRemove, listName);
+		this.toggleDeleteAll();
+	}
+
+	$scope.addItem = function(itemToAdd, listName) {
+		todoFactory.addItem(itemToAdd, listName);
+		this.toggleDeleteAll();
 	}
 
 	$scope.deleteAll = function(listName) {
@@ -138,13 +134,14 @@ app.controller('ListCtrl', ['$scope', 'todoFactory', function($scope, todoFactor
 
 	$scope.showEditItem = function(item) {
 		$scope.editable = true;
+		$scope.editData.editItemTB = item.value;
     }
 
     $scope.editItem = function(item, listName) {
 		var editedItem = {
 			id: item.id,
-			value: document.getElementsByClassName('editText'+item.id)[0].value
-		}
+			value: $scope.editData.editItemTB
+		};
 
 		if(listName === 'todo') {
 			_.remove(todoFactory.todoList, item);

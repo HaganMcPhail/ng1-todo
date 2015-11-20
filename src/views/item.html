@@ -3,8 +3,8 @@
 	&nbsp;
 	<span class="glyphicon glyphicon-pencil pencil icon" ng-click="showEditItem(item)"></span>
 	<span class="itemValue" ng-switch="editable">
-		<form ng-switch-when="true" ng-submit="editItem(item, listName)" style="display:inline;">
-			<input class="editText{{item.id}}" type="text" ng-model="editedItem" placeholder={{item.value}} value="" />
+		<form autocomplete="off" ng-switch-when="true" ng-submit="editItem(item, listName)" style="display:inline;">
+			<input class="editText{{item.id}}" type="text" ng-model="editData.editItemTB" placeholder={{item.value}} autofocus/>
 		</form>
 		<span ng-switch-default class="listItem">{{item.value}}</span>
 	</span>

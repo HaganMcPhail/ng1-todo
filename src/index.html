@@ -13,7 +13,7 @@
 				<div ng-controller="InputCtrl">
 					<form autocomplete="off" ng-submit="submitText()">
 						<input
-							name="add-todo"
+							name=""
 							class="text-box"
 							placeholder="What needs to be done?"
 							value=""
@@ -25,16 +25,8 @@
 				</div>
 			</div>
 			<footer>
-				<a ui-sref="todo">
-					<button class="btn btn-default pagesBtn">
-						ToDo
-					</button>
-				</a>
-				<a ui-sref="completed">
-					<button class="btn btn-default pagesBtn">
-						Completed
-					</button>
-				</a>
+				<a ui-sref="todo"><button class="btn btn-default pagesBtn">ToDo</button></a>
+				<a ui-sref="completed"><button class="btn btn-default pagesBtn">Completed</button></a>
 			</footer>
 		</div>
 		<script src="/scripts/bundle.js"></script>
