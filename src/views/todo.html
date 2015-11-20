@@ -1,6 +1,6 @@
 <div ng-controller="TodoCtrl">
-	<div ng-repeat="item in todoList" class="item">
+	<div ng-repeat="item in data.todoList" class="item">
 		<todo-list-item item="item"></todo-list-item>
 	</div>
-	<delete-all ng-if="showDeleteAllTodo === true"></delete-all>
+	<delete-all ng-if="data.showDeleteAllTodo === true"></delete-all>
 </div>
