@@ -45654,11 +45654,6 @@ app.config(['$urlRouterProvider', '$stateProvider', function($urlRouterProvider,
 			templateUrl: 'views/completed.html',
 			controller: 'ListCtrl'
 		})
-		.state('""', {
-			url: '/todo',
-			templateUrl: 'views/completed.html',
-			controller: 'ListCtrl'
-		})
 }]);
 
 // ********************** Factory ********************** //
