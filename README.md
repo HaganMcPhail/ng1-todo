@@ -1,6 +1,6 @@
 # ng1-todo
 
-# Demo Instructions
-* Download files
-* cd into the directory in the command prompt
+## Demo Instructions
+* download files
+* in the command prompt, "cd" into the directory 
 * run the "gulp" command
